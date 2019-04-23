@@ -1,0 +1,36 @@
+ncat -lk localhost 1090
+
+example of message exchange in lsp protocol:
+
+Content-Length: 123
+
+{"jsonrpc":"2.0","method":"window/logMessage","params":{"type":3,"message":"16 Apr 2019, 08:38:50 Main thread is waiting"}}
+
+GET
+{
+    "jsonrpc": "2.0",
+    "id" : 1,
+    "method": "textDocument/definition",
+    "params": {
+        "textDocument": {
+            "uri": "file:///p%3A/mseng/VSCode/Playgrounds/cpp/use.cpp"
+        },
+        "position": {
+            "line": 3,
+            "character": 12
+        }
+    }
+}
+
+
+GET 
+Content-Length: ...\r\n
+\r\n
+{
+	"jsonrpc": "2.0",
+	"id": 1,
+	"method": "textDocument/didOpen",
+	"params": {
+		...
+	}
+}

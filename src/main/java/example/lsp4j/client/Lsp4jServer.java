@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Array;
@@ -25,6 +26,9 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.utils.NonBlockingReader;
 
 import example.lsp4j.server.TextDocumentServiceImpl;
 import example.lsp4j.server.WorkspaceServiceImpl;
@@ -60,6 +64,15 @@ public class Lsp4jServer implements LanguageServer {
 		
 		byte serverBuffer[] = new byte[1024];
 		byte clientBuffer[] = new byte[1024];
+		
+		Terminal terminal = null;
+		try {
+			terminal = TerminalBuilder.terminal();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		NonBlockingReader r = terminal.reader();
+		PrintWriter w = terminal.writer();
 		
 		ByteArrayInputStreamCustom server_is = new ByteArrayInputStreamCustom( serverBuffer );
 		OutputStream server_os = new ByteArrayOutputStream( 1024 );
