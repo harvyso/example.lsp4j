@@ -142,6 +142,54 @@
 	      </build>
 	    </profile>
 
+		<profile>
+	      <id>startLSP4JClient</id>
+	      <build>
+	        <plugins>
+	          <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>exec-maven-plugin</artifactId>
+	            <configuration>
+	             	<mainClass>example.lsp4j.client.Lsp4jClient</mainClass>
+	             	<workingDirectory>${project.build.directory}</workingDirectory>
+
+				<!-- for exec:exec -->
+		        <!-- <argument>-classpath</argument> -->
+		        <!-- <classpath /> -->
+		
+	              <arguments>
+	              	<argument>${server.host}</argument>
+	              	<argument>${server.port}</argument>
+	              </arguments>
+
+	            </configuration>
+	          </plugin>
+	        </plugins>
+	      </build>
+	    </profile>
+	    
+	    <profile>
+	      <id>startLSP4JServer</id>
+	      <build>
+	        <plugins>
+	          <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>exec-maven-plugin</artifactId>
+	            <configuration>
+	             	<mainClass>example.lsp4j.client.Lsp4jServer</mainClass>
+	             	<workingDirectory>${project.build.directory}</workingDirectory>
+
+	              <arguments>
+	              	<argument>${server.host}</argument>
+	              	<argument>${server.port}</argument>
+	              </arguments>
+
+	            </configuration>
+	          </plugin>
+	        </plugins>
+	      </build>
+	    </profile>
+	    
 	</profiles>
 	
 </project>
