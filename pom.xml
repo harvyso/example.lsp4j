@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>example</groupId>
   <artifactId>lsp4j</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,6 +32,33 @@
 	    <groupId>org.eclipse.lsp4j</groupId>
 	    <artifactId>org.eclipse.lsp4j.jsonrpc</artifactId>
 	    <version>0.7.0</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>commons-codec</groupId>
+	    <artifactId>commons-codec</artifactId>
+	    <version>1.12</version>
+	</dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.beanshell/bsh -->
+	<dependency>
+	    <groupId>org.beanshell</groupId>
+	    <artifactId>bsh</artifactId>
+	    <version>2.0b5</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/com.javarepl/javarepl -->
+	<dependency>
+	    <groupId>com.javarepl</groupId>
+	    <artifactId>javarepl</artifactId>
+	    <version>431</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.jline/jline -->
+	<dependency>
+	    <groupId>org.jline</groupId>
+	    <artifactId>jline</artifactId>
+	    <version>3.11.0</version>
 	</dependency>
 
   </dependencies>
@@ -83,12 +110,52 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
 	    	<version>1.6.0</version>
-         </plugin>
+        </plugin>
+         
+       	<plugin>
+          <groupId>com.github.johnpoth</groupId>
+          <artifactId>jshell-maven-plugin</artifactId>
+	  	  <version>1.1</version>
+	  	  <configuration>
+		        <!--  <argument>-classpath</argument>  -->
+		        <classpath />
+	  	  </configuration>
+		</plugin>
+
+		<!-- https://mvnrepository.com/artifact/com.github.genthaler/beanshell-maven-plugin -->
+		<plugin>
+		    <groupId>com.github.genthaler</groupId>
+		    <artifactId>beanshell-maven-plugin</artifactId>
+		    <version>1.4</version>
+		</plugin>
 
       </plugins>
     </pluginManagement>
 
 	<plugins>
+
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-dependency-plugin</artifactId>
+                  <version>2.1</version>
+                  <executions>
+                    <execution>
+                      <id>copy-alldeps</id>
+                      <phase>package</phase>
+                      <goals>
+                        <goal>copy-dependencies</goal>
+                      </goals>
+                      <configuration>
+                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        <overWriteReleases>false</overWriteReleases>
+                        <overWriteSnapshots>false</overWriteSnapshots>
+                        <overWriteIfNewer>true</overWriteIfNewer>
+                        <excludeTransitive>false</excludeTransitive>
+                      </configuration>
+                    </execution>
+                  </executions>
+               </plugin>
+
 	</plugins>
 
   </build>
@@ -183,6 +250,39 @@
 	              	<argument>${server.host}</argument>
 	              	<argument>${server.port}</argument>
 	              </arguments>
+
+	            </configuration>
+	          </plugin>
+	        </plugins>
+	      </build>
+	    </profile>
+	    
+	    <!-- is it working!? because try-artifact is not in maven repository and what is main class? -->
+	    <!-- see maven try-artifact project on github -->
+	    <profile>
+	      <id>start_tryArtifact</id>
+	      <build>
+	        <plugins>
+	          <plugin>
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>exec-maven-plugin</artifactId>
+	            <configuration>
+		      <executable>jshell</executable>
+	             <!-- <mainClass>net.unit8.erebus.tryartifact.tool.TryJShellTool</mainClass> -->
+	             <workingDirectory>${project.build.directory}</workingDirectory>
+
+				<!-- for exec:exec -->
+		        <!-- <argument>-classpath</argument> -->
+		        <!-- <classpath /> -->
+		
+	              <!-- <arguments> -->
+	              <!--  <argument>${file.props}</argument> -->
+	              <!-- </arguments> -->
+
+			<executableDependency>
+		          <groupId>com.test</groupId>
+		          <artifactId>plugin</artifactId>
+			</executableDependency>
 
 	            </configuration>
 	          </plugin>
